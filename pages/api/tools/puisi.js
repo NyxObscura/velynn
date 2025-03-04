@@ -39,6 +39,7 @@ async function puisi() {
         const { data } = await axios.get(BASE, {
             headers: {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
+                "Referer": "https://karyakarsa.com/",
                 "Accept-Language": "en-US,en;q=0.9",
             },
         });
@@ -55,11 +56,30 @@ async function puisi() {
             throw new Error("Gagal menemukan puisi di halaman.");
         }
 
-        // Ambil satu puisi secara acak
-        let randomIndex = Math.floor(Math.random() * puisiList.length);
-        return puisiList[randomIndex];
+        let puisiFormatted = [];
+        let currentPuisi = [];
+
+        for (let line of puisiList) {
+            if (line === "-----------") {
+                if (currentPuisi.length) {
+                    puisiFormatted.push([...currentPuisi]);
+                    currentPuisi = [];
+                }
+            } else {
+                currentPuisi.push(line);
+            }
+        }
+
+        if (currentPuisi.length) puisiFormatted.push([...currentPuisi]);
+
+        if (puisiFormatted.length === 0) {
+            throw new Error("Tidak ada puisi yang dapat diambil.");
+        }
+
+        let randomIndex = Math.floor(Math.random() * puisiFormatted.length);
+        return puisiFormatted[randomIndex].join("\n");
     } catch (error) {
         console.error("Scraping error:", error.message);
-        throw new Error("Terjadi kesalahan dalam mengambil data puisi.");
+        return "Terjadi kesalahan dalam mengambil data puisi.";
     }
 }
