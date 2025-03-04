@@ -36,9 +36,14 @@ const BASE = "https://karyakarsa.com/sigota/kumpulan-puisi-random-2";
 
 async function puisi() {
     try {
-        const { data } = await axios.get(BASE);
-        const $ = cheerio.load(data);
+        const { data } = await axios.get(BASE, {
+            headers: {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
+                "Accept-Language": "en-US,en;q=0.9",
+            },
+        });
 
+        const $ = cheerio.load(data);
         let puisiList = [];
 
         $(".content-lock p").each((i, el) => {
@@ -50,8 +55,9 @@ async function puisi() {
             throw new Error("Gagal menemukan puisi di halaman.");
         }
 
+        // Ambil satu puisi secara acak
         let randomIndex = Math.floor(Math.random() * puisiList.length);
-        return puisiList[randomIndex]; // Mengambil satu puisi acak
+        return puisiList[randomIndex];
     } catch (error) {
         console.error("Scraping error:", error.message);
         throw new Error("Terjadi kesalahan dalam mengambil data puisi.");
