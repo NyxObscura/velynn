@@ -50,28 +50,8 @@ async function puisi() {
             throw new Error("Gagal menemukan puisi di halaman.");
         }
 
-        let puisiFormatted = [];
-        let currentPuisi = [];
-
-        for (let line of puisiList) {
-            if (line === "-----------") {
-                if (currentPuisi.length) {
-                    puisiFormatted.push([...currentPuisi]);
-                    currentPuisi = [];
-                }
-            } else {
-                currentPuisi.push(line);
-            }
-        }
-
-        if (currentPuisi.length) puisiFormatted.push([...currentPuisi]);
-
-        if (puisiFormatted.length === 0) {
-            throw new Error("Tidak ada puisi yang dapat diambil.");
-        }
-
-        let randomIndex = Math.floor(Math.random() * puisiFormatted.length);
-        return puisiFormatted[randomIndex];
+        let randomIndex = Math.floor(Math.random() * puisiList.length);
+        return puisiList[randomIndex]; // Mengambil satu puisi acak
     } catch (error) {
         console.error("Scraping error:", error.message);
         throw new Error("Terjadi kesalahan dalam mengambil data puisi.");
