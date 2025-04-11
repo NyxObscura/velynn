@@ -1,4 +1,4 @@
-## Getting Started
+## Getting Startedd
 
 First, install the dependencies:
 
